@@ -18,6 +18,7 @@ commands:
       - run:
           name: pull kubeconfig
           command: |
+            pwd
             mkdir -p ~/.kube
             secrethub inject -i tpl/kubeconfig.tpl -o ~/.kube/config
 
