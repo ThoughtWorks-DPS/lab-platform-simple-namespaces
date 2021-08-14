@@ -11,7 +11,6 @@ executors:
   infra-image:
     docker:
       - image: twdps/di-circleci-infra-image:alpine-stable
-    shell: secrethub run --env-file secrethub.env -- /bin/sh -eo pipefail
 
 commands:
  set-environment:
