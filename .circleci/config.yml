@@ -26,6 +26,8 @@ jobs:
   deploy-namespaces:
     executor: infra-image
     steps:
+      - checkout
+      - setup_remote_docker
       - set-environment
       - run:
           name: deploy preview namespaces and gateways
