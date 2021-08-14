@@ -1,0 +1,23 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+  namespace: twdps-prod
+spec:
+  hosts:
+  - "dev.twdps.digital"
+  gateways:
+  - istio-system/twdps-digital-dev-gateway
+  http:
+    - name: httpbin-test
+      match:
+      - uri:
+          prefix: "/httpbin"
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+          host: httpbin.twdps-prod.svc.cluster.local
+          port:
+            number: 8000

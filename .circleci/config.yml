@@ -1,0 +1,49 @@
+---
+version: 2.1
+
+on-push-main: &on-push-main
+  branches:
+    only: /main/
+  tags:
+    ignore: /.*/
+
+executors:
+  infra-image:
+    docker:
+      - image: twdps/di-circleci-infra-image:alpine-stable
+    shell: secrethub run --env-file secrethub.env -- /bin/sh -eo pipefail
+
+commands:
+ set-environment:
+    steps:
+      - run:
+          name: pull kubeconfig
+          command: |
+            mkdir -p ~/.kube
+            secrethub inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+
+jobs:
+  deploy-namespaces:
+    executor: infra-image
+    steps:
+      - set-environment
+      - run:
+          name: deploy preview namespaces and gateways
+          command: bash scripts/preview-namespaces.sh
+      - run:
+          name: deploy httpbin validate app
+          command: kubectl apply -f httpbin-deployment.yaml
+      - run:
+          name: validate simple namespace gateways
+          command: bash scripts/validate_namespace_gateways.sh
+      - run:
+          name: delete httpbin validate app
+          command: kubectl delete -f httpbin-deployment.yaml
+
+workflows:
+  version: 2
+  lab-platform-simple-namespaces-pipeline:
+    jobs:
+      - deploy-namespaces:
+          context: twdps-di
+          filters: *on-push-main
