@@ -81,9 +81,9 @@ Note. Have not included gateway urls for typical ui urls.
 
 | gateway                  | urls                      |
 |--------------------------|---------------------------|
-| dev-io-gateway           | api.dev.preview.twdps.io  |
-| qa-io-gateway            | api.qa.preview.twdps.io   |
-| prod-io-gateway          | api.prod.preview.twdps.io |
+| twdps-io-dev-gateway           | api.dev.preview.twdps.io  |
+| twdps-io-qa-gateway            | api.qa.preview.twdps.io   |
+| twdps-io-prod-gateway          | api.prod.preview.twdps.io |
 
 In this example, the actual externally urls and routes would be:  
 
