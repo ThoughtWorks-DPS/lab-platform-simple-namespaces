@@ -42,7 +42,7 @@ jobs:
           command: kubectl apply -f httpbin-deployment.yaml
       - run:
           name: validate production namespace
-          command: bats validate_istio_injection.bats
+          command: bats test/validate_istio_injection.bats --verbose-run
       - run:
           name: delete httpbin validate app
           command: kubectl delete -f httpbin-deployment.yaml
