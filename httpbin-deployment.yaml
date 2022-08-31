@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: httpbin
-  namespace: twdps-prod
+  namespace: twdps-core-labs-team-prod
   labels:
     app: httpbin
 spec:
@@ -19,14 +19,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: httpbin
-  namespace: twdps-prod
+  namespace: twdps-core-labs-team-prod
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: httpbin
-  namespace: twdps-prod
+  namespace: twdps-core-labs-team-prod
 spec:
   replicas: 2
   selector:

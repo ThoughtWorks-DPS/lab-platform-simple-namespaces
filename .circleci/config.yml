@@ -10,43 +10,44 @@ on-push-main: &on-push-main
 executors:
   infra-image:
     docker:
-      - image: twdps/di-circleci-infra-image:alpine-stable
-    shell: secrethub run -- /bin/sh -eo pipefail
+      - image: twdps/circleci-kube-ops:alpine-0.7.0
     
 commands:
  set-environment:
+    parameters:
+     cluster:
+       description: cluster to be deployed to
+       type: string
     steps:
       - run:
           name: pull kubeconfig
           command: |
-            ls -la
             mkdir -p ~/.kube
-            secrethub inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+            ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
 
 jobs:
   deploy-namespaces:
     executor: infra-image
+    shell: op run --env-file=op.prod.env -- /bin/bash -eo pipefail
     steps:
       - checkout
       - setup_remote_docker
-      - set-environment
+      - set-environment:
+          cluster: prod-us-east-1
       - run:
-          name: deploy preview namespaces and gateways
-          command: bash scripts/preview-namespaces.sh
-      - run:
-          name: deploy httpbin validate app
-          command: kubectl apply -f httpbin-deployment.yaml
-      - run:
-          name: validate simple namespace gateways
-          command: bash scripts/validate_namespace_gateways.sh
-      - run:
-          name: delete httpbin validate app
-          command: kubectl delete -f httpbin-deployment.yaml
+          name: deploy production namespaces
+          command: bash scripts/deploy-namespaces.sh
+      # - run:
+      #     name: deploy httpbin validate app
+      #     command: kubectl apply -f httpbin-deployment.yaml
+      # - run:
+      #     name: delete httpbin validate app
+      #     command: kubectl delete -f httpbin-deployment.yaml
 
 workflows:
   version: 2
   lab-platform-simple-namespaces-pipeline:
     jobs:
       - deploy-namespaces:
-          context: twdps-di
+          context: twdps-core-labs-team
           filters: *on-push-main
