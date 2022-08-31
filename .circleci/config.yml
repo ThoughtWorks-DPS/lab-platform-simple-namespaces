@@ -37,12 +37,16 @@ jobs:
       - run:
           name: deploy production namespaces
           command: bash scripts/deploy-namespaces.sh
-      # - run:
-      #     name: deploy httpbin validate app
-      #     command: kubectl apply -f httpbin-deployment.yaml
-      # - run:
-      #     name: delete httpbin validate app
-      #     command: kubectl delete -f httpbin-deployment.yaml
+      - run:
+          name: deploy httpbin validate app
+          command: kubectl apply -f httpbin-deployment.yaml
+      - run:
+          name: validate production namespace
+          command: bats validate_istio_injection.bats
+      - run:
+          name: delete httpbin validate app
+          command: kubectl delete -f httpbin-deployment.yaml
+          when: always
 
 workflows:
   version: 2
