@@ -6,7 +6,7 @@ namespaces=("dev" "qa" "prod")
 
 echo '# namespaces.yaml' > namespaces.yaml
 echo '# image-pull-secrets.yaml' > image-pull-secrets.yaml
-imagepull=$(op item get svc-github --fields dockerconfigjson --vault=empc-lab --format json | jq -r .value | base64)
+imagepull=$(op item get svc-github --fields dockerconfigjson --vault=empc-lab --format json | jq -r .value | base64 -w0)
 
 for ns in ${namespaces[*]} ; do
 
