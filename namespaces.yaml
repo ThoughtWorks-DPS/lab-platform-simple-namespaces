@@ -1,0 +1,25 @@
+# namespaces.yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twdps-core-labs-team-dev
+  labels:
+    istio-injection: enabled
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twdps-core-labs-team-qa
+  labels:
+    istio-injection: enabled
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twdps-core-labs-team-prod
+  labels:
+    istio-injection: enabled
+
